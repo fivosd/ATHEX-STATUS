@@ -6,10 +6,28 @@ from datetime import datetime
 
 
 def capitalize_first(input_str):
+    """
+        Capitalizes the first letter of a string while keeping rest lowercase.
+
+                Parameters:
+                        input_str (str): The string to format & capitalize.
+
+                Returns:
+                    str: input_str.lower().capitalize()
+    """
     return input_str.lower().capitalize()
 
 
 def get_data():
+    """
+        Reads and returns the ATHEX Status JSON file.
+
+                Parameters:
+
+
+                Returns:
+                    list: name, list: status, int: response_code
+        """
     url = 'https://status.athexgroup.gr/components.json'
     response = rq.get(url)
 
@@ -28,8 +46,28 @@ def get_data():
 
 
 class App:
+    """
+        A class to represent the App.
+
+        ...
+
+        Attributes
+        ----------
+
+        Methods
+        -------
+        __init__():
+            Initializes the App.
+        update_table():
+            Updates the data by making a new GET request.
+        """
 
     def __init__(self):
+        """
+                Initializes the GUI and runs initial population of the data.
+
+        """
+
         # Create the main window
         root = tk.Tk()
         root.title("ATHEX Live Status")
@@ -64,6 +102,11 @@ class App:
         root.mainloop()
 
     def update_table(self):
+        """
+            Updates the Data that is loaded onto the GUI via `mainloop()`.
+
+                """
+
         tree = self.tree
         root = self.root
         # Clear existing data
@@ -71,7 +114,6 @@ class App:
             tree.delete(item)
 
         name, status, resp = get_data()
-        print('Data Updated!')
         # Update last updated time
         last_updated_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.time.set(f"Response: {resp} ---- Last Updated: {last_updated_time}")
@@ -94,7 +136,7 @@ class App:
         tree.tag_configure('red_background', background='lightcoral', foreground='red')
 
         # Schedule the next update
-        root.after(int(2.5 * 1000), self.update_table)
+        root.after(int(1.5 * 1000), self.update_table)
 
 
 if __name__ == '__main__':
